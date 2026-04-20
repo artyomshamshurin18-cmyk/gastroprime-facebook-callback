@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Facebook Data Deletion Callback</title>
+    <script>
+        // This page acts as a Facebook Data Deletion Callback
+        // It returns JSON when accessed via POST
+        
+        function handleRequest() {
+            // Only respond to POST requests
+            if (window.location.search.includes("method=POST") || 
+                document.referrer.includes("facebook")) {
+                
+                // Generate confirmation code
+                const code = Math.random().toString(36).substr(2, 8).toUpperCase();
+                const statusUrl = `https://artyomshamshurin18-cmyk.github.io/gastroprime-facebook-callback/deletion-status.html?code=${code}`;
+                
+                // Return JSON
+                document.write(JSON.stringify({
+                    url: statusUrl,
+                    confirmation_code: code
+                }));
+                
+                // Set content type
+                document.head.innerHTML += "<meta http-equiv=\"Content-Type\" content=\"application/json\">";
+            } else {
+                // Show info page for GET requests
+                document.body.innerHTML = `
+                    <div style="padding: 40px; max-width: 800px; margin: 0 auto;">
+                        <h1>Facebook Data Deletion Callback</h1>
+                        <p>This endpoint handles GDPR data deletion requests for Instagram app <strong>Ins.gastroprime-IG</strong>.</p>
+                        <p><strong>URL for Facebook:</strong> ${window.location.href}</p>
+                        <p><strong>App ID:</strong> 930712786475030</p>
+                        <p><strong>Contact:</strong> contact@gastroprime.ru</p>
+                        <p><strong>Test:</strong> <button onclick="testEndpoint()">Test POST Request</button></p>
+                        <div id="testResult"></div>
+                    </div>
+                `;
+            }
+        }
+        
+        function testEndpoint() {
+            fetch(window.location.href, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "test=1"
+            })
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById("testResult").innerHTML = `
+                    <pre style="background: #f0f0f0; padding: 10px;">${JSON.stringify(data, null, 2)}</pre>
+                `;
+            });
+        }
+        
+        window.addEventListener("load", handleRequest);
+    </script>
+</head>
+<body>
+</body>
+</html>
