@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Facebook Data Deletion Callback - Gastroprime</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+        .status { background: #f8f9fa; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .code { font-family: monospace; background: #e9ecef; padding: 10px; border-radius: 5px; font-size: 18px; color: #1877f2; }
+        pre { background: #f8f9fa; padding: 15px; border-radius: 5px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <div class="status">
+        <h1>📋 Facebook Data Deletion Callback</h1>
+        <p>For Instagram app: <strong>Ins.gastroprime-IG</strong></p>
+        
+        <p><strong>Endpoint URL:</strong></p>
+        <pre>https://artyomshamshurin18-cmyk.github.io/gastroprime-facebook-callback/api/data-deletion.html</pre>
+        
+        <p><strong>How it works:</strong></p>
+        <ol>
+            <li>Facebook sends POST request to this page</li>
+            <li>JavaScript processes the request</li>
+            <li>Returns JSON with confirmation code</li>
+            <li>User can check status on status page</li>
+        </ol>
+        
+        <p><strong>Test the endpoint:</strong></p>
+        <button onclick="testEndpoint()">Test POST Request</button>
+        <div id="testResult" style="margin-top: 15px;"></div>
+        
+        <p><strong>App Details:</strong></p>
+        <ul>
+            <li>App ID: 930712786475030</li>
+            <li>Instagram: @gastroprime.ru</li>
+            <li>Contact: contact@gastroprime.ru</li>
+        </ul>
+    </div>
+    
+    <script>
+        async function testEndpoint() {
+            const resultDiv = document.getElementById("testResult");
+            resultDiv.innerHTML = "⏳ Testing...";
+            
+            try {
+                const response = await fetch("/api/data-deletion.html", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: "signed_request=test"
+                });
+                
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <div style="background: #d4edda; padding: 10px; border-radius: 5px;">
+                        <strong>✅ Success! Status: ${response.status}</strong>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div style="background: #f8d7da; padding: 10px; border-radius: 5px;">
+                        <strong>❌ Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // Auto-test on page load
+        window.addEventListener("load", () => {
+            setTimeout(testEndpoint, 1000);
+        });
+    </script>
+</body>
+</html>
